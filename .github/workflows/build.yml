@@ -78,7 +78,7 @@ jobs:
         run: |
           docker run                             \
             --rm                                 \
-            -v ${pwd):/${{ github.workspace }}   \
+            -v $(pwd):/${{ github.workspace }}   \
             -w ${{ github.workspace }}           \
             --platform linux/${{ matrix.arch }}  \
             ${{ matrix.distro }}                 \
