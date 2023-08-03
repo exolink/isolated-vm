@@ -5,40 +5,40 @@ on:
     types: [created]
 
 jobs:
-  prebuild:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-
-      - name: Build
-        run: |
-          npm install --ignore-scripts
-
-      - name: Prebuild
-        run: |
-          npm run prebuild
-
-      - name: Upload
-        run: |
-          npx prebuild --upload ${{ secrets.UPLOAD_TOKEN }}
-        env:
-          MAKEFLAGS: -j4
+#  prebuild:
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ubuntu-latest, macos-latest]
+#      fail-fast: false
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Use Node.js 18.x
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 18.x
+#
+#      - name: Build
+#        run: |
+#          npm install --ignore-scripts
+#
+#      - name: Prebuild
+#        run: |
+#          npm run prebuild
+#
+#      - name: Upload
+#        run: |
+#          npx prebuild --upload ${{ secrets.UPLOAD_TOKEN }}
+#        env:
+#          MAKEFLAGS: -j4
 
   prebuild-alpine:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: [ arm64, amd64 ]
-        distro: [ "node:18.14.1-alpine3.17", "node:18.17.0-alpine3.18" ]
+        distro: [ "node:18.17.0-alpine3.18" ]
     steps:
       - uses: actions/checkout@v3
 
@@ -59,4 +59,4 @@ jobs:
               apk add g++ make python3 &&                         \
               npm install --ignore-scripts &&                     \
               npm run prebuild &&                                 \
-              npx prebuild --upload ${{ secrets.UPLOAD_TOKEN }} 
+              npx prebuild --arch ${{ matrix.arch }} --upload ${{ secrets.UPLOAD_TOKEN }} 
