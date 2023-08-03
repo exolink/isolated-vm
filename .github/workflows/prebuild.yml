@@ -38,7 +38,7 @@ jobs:
     strategy:
       matrix:
         arch: [ arm64, amd64 ]
-        distro: [ "node:18.14.1-alpine3.17", "node:18.17.0-alpine3.18" ]
+        distro: [ "node:18.14.1-alpine3.17" ]
     steps:
       - uses: actions/checkout@v3
 
