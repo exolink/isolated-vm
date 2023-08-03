@@ -56,7 +56,7 @@ jobs:
             --platform linux/${{ matrix.arch }}                   \
             --env MAKEFLAGS=-j4                                   \
             ${{ matrix.distro }}                                  \
-              apk add g++ make python3 &&                         \
+              apk add build-base make python3 &&                  \
               npm install --ignore-scripts &&                     \
               npm run prebuild &&                                 \
               npx prebuild --arch ${{ matrix.arch }} --upload ${{ secrets.UPLOAD_TOKEN }} 
