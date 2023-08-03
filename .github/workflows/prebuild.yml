@@ -59,4 +59,4 @@ jobs:
               apk add build-base make python3 &&                  \
               npm install --ignore-scripts &&                     \
               npm run prebuild &&                                 \
-              npx prebuild --arch ${{ matrix.arch }} --upload ${{ secrets.UPLOAD_TOKEN }} 
+              npx prebuild --libc musl --arch ${{ matrix.arch }} --upload ${{ secrets.UPLOAD_TOKEN }} 
