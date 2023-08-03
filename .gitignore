@@ -5,3 +5,9 @@ out/
 .cache/
 compile_commands.json
 /prebuilds/
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/isolated-vm.iml
+/.idea/markdown.xml
+/.idea/modules.xml
+/.idea/vcs.xml
