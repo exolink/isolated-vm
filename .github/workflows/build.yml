@@ -39,8 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 18.17.0, 18.14.1 ]
-    container: node:${{ matrix.node-version }}-alpine3.18
+        node-version: [ node:18.17.0-alpine3.18, node:18.14.1-alpine3.17 ]
+    container: ${{ matrix.node-version }}
     steps:
       - uses: actions/checkout@v3
       - name: install build deps
