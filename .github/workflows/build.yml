@@ -1,8 +1,8 @@
-name: Build & Test
-
-on: [push, pull_request]
-
-jobs:
+#name: Build & Test
+#
+#on: [push, pull_request]
+#
+#jobs:
 #  build-and-test:
 #    runs-on: ${{ matrix.os }}
 #    strategy:
@@ -62,27 +62,29 @@ jobs:
 #        run: |
 #          npm test
 #        timeout-minutes: 4
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [ arm64, amd64 ]
-        distro: [ "node:18.17.0-alpine3.18" ]
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: ${{ matrix.arch }}
 
-      - name: Run in Docker
-        run: |
-          docker run                             \
-            --rm                                 \
-            -v $(pwd):/${{ github.workspace }}   \
-            -w ${{ github.workspace }}           \
-            --platform linux/${{ matrix.arch }}  \
-            ${{ matrix.distro }}                 \
-              apk add g++ make python3 &&        \
-              npm install --build-from-source
+#  build:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        arch: [ arm64, amd64 ]
+#        distro: [ "node:18.17.0-alpine3.18" ]
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
+#        with:
+#          platforms: ${{ matrix.arch }}
+#
+#      - name: Run in Docker
+#        run: |
+#          docker run                             \
+#            --rm                                 \
+#            -v $(pwd):/${{ github.workspace }}   \
+#            -w ${{ github.workspace }}           \
+#            --platform linux/${{ matrix.arch }}  \
+#            ${{ matrix.distro }}                 \
+#              apk add g++ make python3 &&        \
+#              npm install --build-from-source

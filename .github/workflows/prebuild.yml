@@ -13,23 +13,20 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
+
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-      - name: Add msbuild to PATH
-        if: matrix.os == 'windows-latest'
-        uses: microsoft/setup-msbuild@v1.3
-      - name: Install node-gyp
-        if: matrix.os == 'windows-latest'
-        run: |
-          npm install --global node-gyp@latest
+
       - name: Build
         run: |
           npm install --ignore-scripts
+
       - name: Prebuild
         run: |
           npm run prebuild
+
       - name: Upload
         run: |
           npx prebuild --upload ${{ secrets.UPLOAD_TOKEN }}
@@ -38,20 +35,28 @@ jobs:
 
   prebuild-alpine:
     runs-on: ubuntu-latest
-    container: node:18-alpine3.18
+    strategy:
+      matrix:
+        arch: [ arm64, amd64 ]
+        distro: [ "node:18.14.1-alpine3.17", "node:18.17.0-alpine3.18" ]
     steps:
       - uses: actions/checkout@v3
-      - name: install build deps
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: ${{ matrix.arch }}
+
+      - name: Run in Docker
         run: |
-          apk add g++ make python3
-      - name: Build
-        run: |
-          npm install --ignore-scripts
-      - name: Prebuild
-        run: |
-          npm run prebuild
-      - name: Upload
-        run: |
-          npx prebuild --upload ${{ secrets.UPLOAD_TOKEN }}
-        env:
-          MAKEFLAGS: -j4
+          docker run                                              \
+            --rm                                                  \
+            -v $(pwd):/${{ github.workspace }}                    \
+            -w ${{ github.workspace }}                            \
+            --platform linux/${{ matrix.arch }}                   \
+            --env MAKEFLAGS=-j4                                   \
+            ${{ matrix.distro }}                                  \
+              apk add g++ make python3 &&                         \
+              npm install --ignore-scripts &&                     \
+              npm run prebuild &&                                 \
+              npx prebuild --upload ${{ secrets.UPLOAD_TOKEN }} 
