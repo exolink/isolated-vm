@@ -8,25 +8,16 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "install": "prebuild-install || (node-gyp rebuild --release -j 4 && node-gyp clean)",
-    "rebuild": "node-gyp rebuild --release -j 4",
-    "prebuild": "prebuild",
-    "upload": "prebuild --upload ${GITHUB_TOKEN}",
+    "install": "node-gyp-build",
     "lint": "find src -name '*.cc' | xargs -n1 clang-tidy",
-    "test": "node test.js"
+    "test": "node test.js || nodejs test.js",
+    "prebuild": "prebuildify -t 18.14.1 --strip"
   },
   "dependencies": {
-    "prebuild-install": "^7.1.1"
+    "node-gyp-build": "^4.6.0"
   },
   "devDependencies": {
-    "isolated-vm": ".",
-    "prebuild": "^11.0.4"
-  },
-  "overrides": {
-    "node-gyp": "^9.4.0"
-  },
-  "binary": {
-    "module_path": "out"
+    "prebuildify": "^5.0.1"
   },
   "repository": {
     "type": "git",
@@ -36,7 +27,7 @@
   "license": "ISC",
   "gypfile": true,
   "bugs": {
-    "url": "https://github.com/laverdet/isolated-vm/issues"
+    "url": "https://github.com/exolink/isolated-vm/issues"
   },
-  "homepage": "https://github.com/laverdet/isolated-vm#readme"
+  "homepage": "https://github.com/exolink/isolated-vm#readme"
 }

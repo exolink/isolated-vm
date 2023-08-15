@@ -1,0 +1,73 @@
+on:
+  push:
+    tags:
+      - 'v*'
+name: Build binaries and create release
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    name: Build
+    steps:
+      - uses: actions/checkout@v3.5.3
+      - uses: actions/setup-node@v3.8.0
+        with:
+          node-version: 18.14.1
+      - run: npm install
+      - run: npm run prebuild
+      - uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ matrix.os }}
+          path: ./prebuilds
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: ls -R .
+#      - name: Checkout code
+#        uses: actions/checkout@v3.5.3
+#      - name: Get builds
+#        uses: actions/download-artifact@v3.0.2
+#        with:
+#          path: prebuilds
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1.1.4
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ github.ref }}
+#          release_name: Release ${{ github.ref }}
+#          draft: false
+#          prerelease: true
+#      - name: Get version
+#        id: get_version
+#        run: echo "VERSION=$(git describe --tags)" >> $GITHUB_OUTPUT
+#      - name: Compress builds
+#        run: |
+#          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-linux-x86.tar" --directory "prebuilds/ubuntu-latest" .
+#          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-osx-x86.tar" --directory "prebuilds/macos-latest" .
+#      - name: Upload x86 build
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: ./${{ steps.get_version.outputs.VERSION }}-linux-x86.tar
+#          asset_name: ${{ steps.get_version.outputs.VERSION }}-linux-x86.tar
+#          asset_content_type: application/x-tar
+#      - name: Upload osx build
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: ./${{ steps.get_version.outputs.VERSION }}-osx-x86.tar
+#          asset_name: ${{ steps.get_version.outputs.VERSION }}-osx-x86.tar
+#          asset_content_type: application/x-tar
+      #- uses: JS-DevTools/npm-publish@v1
+      #  with:
+      #    token: ${{ secrets.NPM_TOKEN }}
