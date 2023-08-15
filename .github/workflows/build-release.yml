@@ -89,8 +89,9 @@ jobs:
           asset_name: ${{ steps.get_version.outputs.VERSION }}-arm64.tar
           asset_content_type: application/x-tar
 
-
-
-#      - uses: JS-DevTools/npm-publish@v1
-      #  with:
-      #    token: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}
+          dry-run: true
