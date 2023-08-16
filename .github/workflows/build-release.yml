@@ -55,9 +55,10 @@ jobs:
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
         with:
+          branch: v3.18
           arch: aarch64
           packages: >
-            build-base
+            g++
             make
             python3
             nodejs
