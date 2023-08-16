@@ -4,11 +4,12 @@ on:
 name: Build binaries and create release
 jobs:
   check:
-    name: Check if release already exists
+    name: Check if release or package already exists
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.get_version.outputs.version }}
+      version: v${{ steps.get_version.outputs.version }}
       release_exists: ${{ steps.release_exists.outputs.exists }}
+      package_exists: ${{ steps.package_exists.outputs.exists }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -17,21 +18,36 @@ jobs:
 
       - name: Get version
         id: get_version
-        run: echo "version=v$(npm pkg get version | sed 's/"//g')" >> $GITHUB_OUTPUT
+        run: echo "version=$(npm pkg get version | sed 's/"//g')" >> $GITHUB_OUTPUT
+
+      - name: Get package name
+        id: get_name
+        run: echo "name=$(npm pkg get name | sed 's/"//g')" >> $GITHUB_OUTPUT
 
       - name: Check release
         id: release_exists
         run: |
-          if [ $(git tag -l "${{ steps.get_version.outputs.version }}") ]; then
+          if [ $(git tag -l "v${{ steps.get_version.outputs.version }}") ]; then
             echo "exists=yes" >> $GITHUB_OUTPUT
           else
             echo "exists=no" >> $GITHUB_OUTPUT
           fi
 
+      - name: Check package
+        id: package_exists
+        run: |
+          npm view ${{ steps.get_name.outputs.name }}@${{ steps.get_version.outputs.version }} version &> /dev/null
+          if [ $? -eq 0 ]; then
+            echo "exists=yes" >> $GITHUB_OUTPUT
+          else
+            echo "exists=no" >> $GITHUB_OUTPUT
+          fi          
+
       - name: Log outputs
         run: |
           echo "Release version: ${{ steps.get_version.outputs.version }}"
           echo "Release exists:  ${{ steps.release_exists.outputs.exists }}"
+          echo "Package exists:  ${{ steps.package_exists.outputs.exists }}"
 
   build:
     needs: [check]
@@ -41,7 +57,7 @@ jobs:
 #        os: [macos-latest, ubuntu-latest, self-hosted]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
-    if: needs.check.outputs.exists == 'no'
+    if: needs.check.outputs.release_exists == 'no' && needs.check.outputs.package_exists == 'no'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
