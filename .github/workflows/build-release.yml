@@ -92,7 +92,7 @@ jobs:
       - name: Upload prebuild as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.os }}
+#          name: ${{ matrix.os }}
           path: prebuilds/
           retention-days: 1
 
