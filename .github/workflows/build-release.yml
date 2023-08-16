@@ -60,11 +60,13 @@ jobs:
             build-base
             make
             python3
+            nodejs
+            npm
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
+#      - name: Setup Node
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 18.x
 
 #      - name: Install build environment
 #        run: sudo apt-get install python3 make g++
@@ -72,11 +74,13 @@ jobs:
 
       - name: Install Node dependencies
         run: npm install --ignore-scripts
+        shell: alpine.sh {0}
 
       - name: Build package for ${{ matrix.os }}
         run: npm run prebuild
         env:
           MAKEFLAGS: -j4
+        shell: alpine.sh {0}
 
       - name: Upload prebuild as artifact
         uses: actions/upload-artifact@v3
