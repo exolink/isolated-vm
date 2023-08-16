@@ -1,7 +1,4 @@
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 name: Build binaries and create release
@@ -16,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -56,25 +55,26 @@ jobs:
 
       - name: Get version
         id: get_version
-        run: echo "VERSION=$(git describe --tags)" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(npm pkg get version | sed 's/"//g')" >> $GITHUB_OUTPUT
 
       - name: Compress builds
         run: |
-          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-linux-x86.tar" --directory "prebuilds/ubuntu-latest" .
-#          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-osx-x86.tar" --directory "prebuilds/macos-latest" .
-#          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-arm64.tar" --directory "prebuilds/self-hosted" .
+          tar --create --verbose --file="./v${{ steps.get_version.outputs.VERSION }}-linux-x86.tar" --directory "prebuilds/ubuntu-latest" .
+#          tar --create --verbose --file="./v${{ steps.get_version.outputs.VERSION }}-osx-x86.tar" --directory "prebuilds/macos-latest" .
+#          tar --create --verbose --file="./v${{ steps.get_version.outputs.VERSION }}-arm64.tar" --directory "prebuilds/self-hosted" .
 
       - run: find .
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
           draft: false
           prerelease: false
           files: |
-            ${{ steps.get_version.outputs.VERSION }}-linux-x86.tar
-#            ${{ steps.get_version.outputs.VERSION }}-osx-x86.tar
-#            ${{ steps.get_version.outputs.VERSION }}-arm64.tar
+            v${{ steps.get_version.outputs.VERSION }}-linux-x86.tar
+#            v${{ steps.get_version.outputs.VERSION }}-osx-x86.tar
+#            v${{ steps.get_version.outputs.VERSION }}-arm64.tar
 
 #      - name: Upload linux x86 build
 #        uses: actions/upload-release-asset@v1
