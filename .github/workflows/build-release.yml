@@ -31,6 +31,8 @@ jobs:
 
       - name: Build package for ${{ matrix.os }}
         run: npm run prebuild
+        env:
+          MAKEFLAGS: -j4
 
       - name: Upload prebuild as artifact
         uses: actions/upload-artifact@v3
