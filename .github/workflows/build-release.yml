@@ -42,9 +42,10 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, self-hosted]
+#        os: [macos-latest, ubuntu-latest, self-hosted]
+        os: [self-hosted]
     runs-on: ${{ matrix.os }}
-    if: needs.check.outputs.package_exists == 'no'
+#    if: needs.check.outputs.package_exists == 'no'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -72,8 +73,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}
-          path: ./prebuilds
+          path: ./prebuilds/*/**
           retention-days: 1
+
+      - run: find .
 
   release:
     name: Publish package
@@ -88,9 +91,10 @@ jobs:
         with:
           path: prebuilds
 
-      - name: Publish to npm
-        uses: JS-DevTools/npm-publish@v2
-        with:
-          access: public
-          token: ${{ secrets.NPM_TOKEN }}
-          dry-run: false
+      - run: find .
+#      - name: Publish to npm
+#        uses: JS-DevTools/npm-publish@v2
+#        with:
+#          access: public
+#          token: ${{ secrets.NPM_TOKEN }}
+#          dry-run: false
