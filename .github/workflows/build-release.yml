@@ -57,7 +57,8 @@ jobs:
 #        os: [macos-latest, ubuntu-latest, self-hosted]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
-    if: needs.check.outputs.release_exists == 'no' && needs.check.outputs.package_exists == 'no'
+#    if: needs.check.outputs.release_exists == 'no' && needs.check.outputs.package_exists == 'no'
+    if: needs.check.outputs.release_exists == 'no'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
