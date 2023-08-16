@@ -73,7 +73,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}
-          path: ./prebuilds/*/**
+          path: prebuilds/${{ matrix.os }}/**
           retention-days: 1
 
       - run: find .
