@@ -58,13 +58,12 @@ jobs:
           branch: v3.18
           arch: aarch64
           packages: >
-            libstdc++
-            binutils-gold
-            musl-dev
-            gcc
-            libgcc
-            linux-headers
-            g++
+            c-ares-dev
+            zlib-dev
+            openssl-dev
+            nghttp2-dev 
+            icu-dev
+            brotli-dev
             make
             python3
             nodejs
