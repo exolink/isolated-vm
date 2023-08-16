@@ -56,9 +56,9 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Install build environment
-        run: sudo apt-get install python3 make g++
-        if: matrix.os == 'self-hosted'
+#      - name: Install build environment
+#        run: sudo apt-get install python3 make g++
+#        if: matrix.os == 'self-hosted'
 
       - name: Install Node dependencies
         run: npm install --ignore-scripts
