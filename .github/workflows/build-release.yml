@@ -65,6 +65,7 @@ jobs:
             icu-dev
             brotli-dev
             make
+            build-base
             python3
             nodejs
             npm
