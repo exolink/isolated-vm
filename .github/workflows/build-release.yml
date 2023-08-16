@@ -39,6 +39,7 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ./prebuilds
+          retention-days: 1
 
   release:
     name: Create Release
@@ -53,29 +54,28 @@ jobs:
         with:
           path: prebuilds
 
-      - run: find .
-
-#      - name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ github.ref }}
-#          release_name: Release ${{ github.ref }}
-#          draft: false
-#          prerelease: true
-
       - name: Get version
         id: get_version
         run: echo "VERSION=$(git describe --tags)" >> $GITHUB_OUTPUT
 
-#      - name: Compress builds
-#        run: |
-#          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-linux-x86.tar" --directory "prebuilds/ubuntu-latest" .
+      - name: Compress builds
+        run: |
+          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-linux-x86.tar" --directory "prebuilds/ubuntu-latest" .
 #          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-osx-x86.tar" --directory "prebuilds/macos-latest" .
 #          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-arm64.tar" --directory "prebuilds/self-hosted" .
-#
+
+      - run: find .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          prerelease: false
+          files: |
+            ${{ steps.get_version.outputs.VERSION }}-linux-x86.tar
+#            ${{ steps.get_version.outputs.VERSION }}-osx-x86.tar
+#            ${{ steps.get_version.outputs.VERSION }}-arm64.tar
+
 #      - name: Upload linux x86 build
 #        uses: actions/upload-release-asset@v1
 #        env:
