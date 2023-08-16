@@ -60,6 +60,7 @@ jobs:
           packages: >
             libstdc++
             binutils-gold
+            musl-dev
             gcc
             libgcc
             linux-headers
