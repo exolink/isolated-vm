@@ -58,6 +58,7 @@ jobs:
           branch: v3.18
           arch: aarch64
           packages: >
+            .build-deps-yarn
             g++
             make
             python3
