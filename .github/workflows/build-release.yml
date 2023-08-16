@@ -54,11 +54,12 @@ jobs:
 
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
-#        with:
-#          packages: >
-#            build-base
-#            make
-#            python3
+        with:
+          arch: aarch64
+          packages: >
+            build-base
+            make
+            python3
 
       - name: Setup Node
         uses: actions/setup-node@v3
