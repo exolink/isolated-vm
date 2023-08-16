@@ -26,7 +26,6 @@ jobs:
 
       - name: Check release
         id: release_exists
-        continue-on-error: true
         run: |
           if [ $(git tag -l "v${{ steps.get_version.outputs.version }}") ]; then
             echo "exists=yes" >> $GITHUB_OUTPUT
@@ -36,10 +35,8 @@ jobs:
 
       - name: Check package
         id: package_exists
-        continue-on-error: true
         run: |
-          npm view ${{ steps.get_name.outputs.name }}@${{ steps.get_version.outputs.version }} version &> /dev/null
-          if [ $? -eq 0 ]; then
+          if [ $(npm view ${{ steps.get_name.outputs.name }}@${{ steps.get_version.outputs.version }} version 2> /dev/null) ]; then
             echo "exists=yes" >> $GITHUB_OUTPUT
           else
             echo "exists=no" >> $GITHUB_OUTPUT
