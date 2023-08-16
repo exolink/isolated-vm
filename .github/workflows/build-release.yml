@@ -43,7 +43,7 @@ jobs:
     strategy:
       matrix:
 #        os: [macos-latest, ubuntu-latest, self-hosted]
-        os: [self-hosted]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 #    if: needs.check.outputs.package_exists == 'no'
     steps:
