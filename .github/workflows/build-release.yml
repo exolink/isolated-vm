@@ -52,6 +52,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup latest Alpine Linux
+        uses: jirutka/setup-alpine@v1
+        with:
+          packages: >
+            build-base
+            make
+            python3        
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -73,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}
-          path: prebuilds/${{ matrix.os }}/**
+          path: prebuilds/
           retention-days: 1
 
       - run: find .
