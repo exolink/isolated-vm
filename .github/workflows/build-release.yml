@@ -58,7 +58,11 @@ jobs:
           branch: v3.18
           arch: aarch64
           packages: >
-            .build-deps-yarn
+            libstdc++
+            binutils-gold
+            gcc
+            libgcc
+            linux-headers
             g++
             make
             python3
