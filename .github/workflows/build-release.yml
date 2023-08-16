@@ -58,7 +58,7 @@ jobs:
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 #    if: needs.check.outputs.release_exists == 'no' && needs.check.outputs.package_exists == 'no'
-    if: needs.check.outputs.release_exists == 'no'
+    if: needs.check.outputs.package_exists == 'no'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -102,32 +102,26 @@ jobs:
         with:
           path: prebuilds
 
-#      - name: Get version
-#        id: get_version
-#        run: echo "VERSION=$(npm pkg get version | sed 's/"//g')" >> $GITHUB_OUTPUT
-
-      - name: Compress builds
-        run: |
-          tar --create --verbose --file="./${{ needs.check.outputs.version }}-linux-x86.tar" --directory "prebuilds/ubuntu-latest" .
-#          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-osx-x86.tar" --directory "prebuilds/macos-latest" .
-#          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-arm64.tar" --directory "prebuilds/self-hosted" .
-
-      - run: find .
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ needs.check.outputs.version }}
-          draft: false
-          prerelease: false
-          files: |
-            ${{ needs.check.outputs.version }}-linux-x86.tar
-#            v${{ steps.get_version.outputs.VERSION }}-osx-x86.tar
-#            v${{ steps.get_version.outputs.VERSION }}-arm64.tar
+#      - name: Compress builds
+#        run: |
+#          tar --create --verbose --file="./${{ needs.check.outputs.version }}-linux-x86.tar" --directory "prebuilds/ubuntu-latest" .
+#          tar --create --verbose --file="./${{ needs.check.outputs.version }}-osx-x86.tar" --directory "prebuilds/macos-latest" .
+#          tar --create --verbose --file="./${{ needs.check.outputs.version }}-arm64.tar" --directory "prebuilds/self-hosted" .
 #
-#      - name: Publish to npm
-#        uses: JS-DevTools/npm-publish@v2
+#      - name: Create Release
+#        uses: softprops/action-gh-release@v1
 #        with:
-#          access: public
-#          token: ${{ secrets.NPM_TOKEN }}
-#          dry-run: false
+#          tag_name: ${{ needs.check.outputs.version }}
+#          draft: false
+#          prerelease: false
+#          files: |
+#            ${{ needs.check.outputs.version }}-linux-x86.tar
+#            ${{ needs.check.outputs.version }}-osx-x86.tar
+#            ${{ needs.check.outputs.version }}-arm64.tar
+
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}
+          dry-run: false
