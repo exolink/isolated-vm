@@ -9,6 +9,7 @@ isolated-vm -- Access to multiple isolates in nodejs
 FORK NOTES
 --------------
 This fork includes prebuilds for darwin x64, linux x64, alpine x64 and alpine arm64.
+Only builds against LTS Node.
 
 
 
