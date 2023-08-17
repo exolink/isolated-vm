@@ -47,11 +47,11 @@ jobs:
           {runner: ubuntu-latest, os: linux, arch: x64, shell: bash},
           {runner: ubuntu-latest, os: alpine, arch: aarch64, shell: 'alpine.sh {0}'},
         ]
-    runs-on: ${{ matrix.runner }}
+    runs-on: ${{ matrix.build.runner }}
 #    if: needs.check.outputs.package_exists == 'no'
     defaults:
       run:
-        shell: ${{ matrix.shell }}
+        shell: ${{ matrix.build.shell }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -62,7 +62,7 @@ jobs:
         uses: jirutka/setup-alpine@v1
         with:
           branch: v3.18
-          arch: ${{ matrix.arch }}
+          arch: ${{ matrix.build.arch }}
           packages: >
             c-ares-dev
             zlib-dev
@@ -75,18 +75,18 @@ jobs:
             python3
             nodejs
             npm
-        if: matrix.os == 'alpine'
+        if: matrix.build.os == 'alpine'
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-        if: matrix.os != 'alpine'
+        if: matrix.build.os != 'alpine'
 
       - name: Install Node dependencies
         run: npm install --ignore-scripts
 
-      - name: Build package for ${{ matrix.os }}-${{ matrix.arch }}
+      - name: Build package for ${{ matrix.build.os }}-${{ matrix.build.arch }}
         run: npm run prebuild
         env:
           MAKEFLAGS: -j4
