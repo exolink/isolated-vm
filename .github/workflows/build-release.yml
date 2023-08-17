@@ -46,6 +46,7 @@ jobs:
           {runner: macos-latest, os: darwin, arch: x64, shell: bash},
           {runner: ubuntu-latest, os: linux, arch: x64, shell: bash},
           {runner: ubuntu-latest, os: alpine, arch: aarch64, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: alpine, arch: x86_64, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
     if: needs.check.outputs.package_exists == 'no'
