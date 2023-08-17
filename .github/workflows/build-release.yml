@@ -43,13 +43,14 @@ jobs:
     strategy:
       matrix:
         build: [
-          {runner: macos-latest, os: darwin, arch: x64, shell: bash},
-          {runner: ubuntu-latest, os: linux, arch: x64, shell: bash},
-          {runner: ubuntu-latest, os: alpine, arch: aarch64, shell: 'alpine.sh {0}'},
-          {runner: ubuntu-latest, os: alpine, arch: x86_64, shell: 'alpine.sh {0}'},
+          {runner: macos-m1, os: darwin, arch: aarch64, shell: bash}
+#          {runner: macos-latest, os: darwin, arch: x64, shell: bash},
+#          {runner: ubuntu-latest, os: linux, arch: x64, shell: bash},
+#          {runner: ubuntu-latest, os: alpine, arch: aarch64, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: alpine, arch: x86_64, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
-    if: needs.check.outputs.package_exists == 'no'
+#    if: needs.check.outputs.package_exists == 'no'
     defaults:
       run:
         shell: ${{ matrix.build.shell }}
@@ -112,9 +113,10 @@ jobs:
           name: artifact
           path: prebuilds
 
-      - name: Publish to npm
-        uses: JS-DevTools/npm-publish@v2
-        with:
-          access: public
-          token: ${{ secrets.NPM_TOKEN }}
-          dry-run: false
+      - run: find .
+#      - name: Publish to npm
+#        uses: JS-DevTools/npm-publish@v2
+#        with:
+#          access: public
+#          token: ${{ secrets.NPM_TOKEN }}
+#          dry-run: false
