@@ -48,7 +48,7 @@ jobs:
           {runner: ubuntu-latest, os: alpine, arch: aarch64, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
-#    if: needs.check.outputs.package_exists == 'no'
+    if: needs.check.outputs.package_exists == 'no'
     defaults:
       run:
         shell: ${{ matrix.build.shell }}
@@ -97,8 +97,6 @@ jobs:
           path: prebuilds/
           retention-days: 1
 
-      - run: find .
-
   release:
     name: Publish package
     runs-on: ubuntu-latest
@@ -113,10 +111,9 @@ jobs:
           name: artifact
           path: prebuilds
 
-      - run: find .
-#      - name: Publish to npm
-#        uses: JS-DevTools/npm-publish@v2
-#        with:
-#          access: public
-#          token: ${{ secrets.NPM_TOKEN }}
-#          dry-run: false
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}
+          dry-run: false
