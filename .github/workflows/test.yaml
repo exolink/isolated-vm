@@ -15,7 +15,7 @@ jobs:
       - name: debug python version
         run: |
           echo "JSON: ${{ steps.python.outputs.version }}"
-          echo "Major: ${{ fromJSON(steps.python.outputs.version).major }}"
+          echo "Major: ${{ fromJSON(steps.python.outputs.version.major) }}"
           echo "Minor: ${{ fromJSON(steps.python.outputs.version).minor }}"
           echo "Patch: ${{ fromJSON(steps.python.outputs.version).patch }}"
 
