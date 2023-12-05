@@ -44,13 +44,13 @@ jobs:
       matrix:
         build: [
           {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 18.x, shell: bash},
-          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.x, shell: bash},
-          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.x, shell: 'alpine.sh {0}'},
-          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.x, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.x, shell: bash},
+#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.x, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.x, shell: 'alpine.sh {0}'},
           {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 20.x, shell: bash},
-          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.x, shell: bash},
-          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.x, shell: 'alpine.sh {0}'},
-          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.x, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.x, shell: bash},
+#          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.x, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.x, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
     if: needs.check.outputs.package_exists == 'no'
@@ -59,7 +59,7 @@ jobs:
         shell: ${{ matrix.build.shell }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -83,10 +83,14 @@ jobs:
         if: matrix.build.os == 'alpine'
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.build.node }}
         if: matrix.build.os != 'alpine'
+
+      - name: fix python3.12 missing distutils
+        run: python3 -m pip install packaging
+        if: matrix.build.os == 'darwin'
 
       - name: Install Node dependencies
         run: npm install --ignore-scripts
@@ -121,4 +125,4 @@ jobs:
         with:
           access: public
           token: ${{ secrets.NPM_TOKEN }}
-          dry-run: false
+          dry-run: true
