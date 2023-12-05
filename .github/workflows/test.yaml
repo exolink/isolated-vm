@@ -15,11 +15,12 @@ jobs:
       - name: debug python version
         run: |
           echo "JSON: ${{ steps.python.outputs.version }}"
-          echo "Major: ${{ fromJSON(steps.python.outputs.version.major) }}"
-          echo "Minor: ${{ fromJSON(steps.python.outputs.version).minor }}"
-          echo "Patch: ${{ fromJSON(steps.python.outputs.version).patch }}"
 
       - name: fix python3.12 missing distutils
+        env:
+          MAJOR: ${{ fromJSON(steps.python.outputs.version).major }}
+          MINOR: ${{ fromJSON(steps.python.outputs.version).minor }}
+          PATCH: ${{ fromJSON(steps.python.outputs.version).patch }}
         run: python3 -m pip install packaging setuptools
-        if: ${{ fromJSON(steps.python.outputs.version).major >= 3 && fromJSON(steps.python.outputs.version).minor >= 12 }}
+        if: ${{ fromJSON($MAJOR) >= 3 && fromJSON($MINOR) >= 12 }}
 
