@@ -121,4 +121,4 @@ jobs:
         with:
           access: public
           token: ${{ secrets.NPM_TOKEN }}
-          dry-run: false
+          dry-run: true
