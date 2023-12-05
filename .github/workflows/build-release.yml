@@ -85,7 +85,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: matrix.build.node
+          node-version: ${{ matrix.build.node }}
         if: matrix.build.os != 'alpine'
 
       - name: Install Node dependencies
