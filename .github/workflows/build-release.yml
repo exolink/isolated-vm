@@ -88,9 +88,14 @@ jobs:
           node-version: ${{ matrix.build.node }}
         if: matrix.build.os != 'alpine'
 
+      - name: get python version
+        id: python
+        run: |
+          echo "version=$(python3 -V | awk '{split($2,a,"."); print "{\"major\":"a[1]",\"minor\":"a[2]",\"patch\":"a[3]"}"}')" >> $GITHUB_OUTPUT
+
       - name: fix python3.12 missing distutils
         run: python3 -m pip install packaging setuptools
-        if: matrix.build.os == 'darwin'
+        if: ${{ fromJSON(steps.python.outputs.version).major >= 3 && fromJSON(steps.python.outputs.version).minor >= 12 }}
 
       - name: Install Node dependencies
         run: npm install --ignore-scripts
