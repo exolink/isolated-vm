@@ -108,7 +108,7 @@ jobs:
         run: npm install --ignore-scripts
 
       - name: Build package for ${{ matrix.build.os }}-${{ matrix.build.arch }}
-        run: npm run prebuild -- -t ${{  }}
+        run: npm run prebuild -- -t ${{ matrix.build.node }}
         env:
           MAKEFLAGS: -j4
 
