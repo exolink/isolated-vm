@@ -44,14 +44,14 @@ jobs:
     strategy:
       matrix:
         build: [
-          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 18.19.0, shell: bash},
-          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.19.0, shell: bash},
-          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.19.0, shell: 'alpine.sh {0}'},
-          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.19.0, shell: 'alpine.sh {0}'},
-          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 20.10.0, shell: bash},
+#          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 18.19.0, shell: bash},
+#          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.19.0, shell: bash},
+#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.19.0, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.19.0, shell: 'alpine.sh {0}'},
+#          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 20.10.0, shell: bash},
           {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.10.0, shell: bash},
-          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.10.0, shell: 'alpine.sh {0}'},
-          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.10.0, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.10.0, shell: 'alpine.sh {0}'},
+#          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.10.0, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
     if: needs.check.outputs.package_exists == 'no'
