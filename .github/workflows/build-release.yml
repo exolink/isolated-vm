@@ -43,10 +43,14 @@ jobs:
     strategy:
       matrix:
         build: [
-          {runner: macos-latest, os: darwin, arch: x64, shell: bash},
-          {runner: ubuntu-latest, os: linux, arch: x64, shell: bash},
-          {runner: ubuntu-latest, os: alpine, arch: aarch64, shell: 'alpine.sh {0}'},
-          {runner: ubuntu-latest, os: alpine, arch: x86_64, shell: 'alpine.sh {0}'},
+          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 18.x, shell: bash},
+          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.x, shell: bash},
+          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.x, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.x, shell: 'alpine.sh {0}'},
+          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 20.x, shell: bash},
+          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.x, shell: bash},
+          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.x, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.x, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
     if: needs.check.outputs.package_exists == 'no'
@@ -62,7 +66,7 @@ jobs:
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
         with:
-          branch: v3.18
+          branch: ${{ matrix.build.branch }}
           arch: ${{ matrix.build.arch }}
           packages: >
             c-ares-dev
@@ -81,7 +85,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: matrix.build.node
         if: matrix.build.os != 'alpine'
 
       - name: Install Node dependencies
