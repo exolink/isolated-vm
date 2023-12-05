@@ -44,13 +44,13 @@ jobs:
       matrix:
         build: [
           {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 18.x, shell: bash},
-#          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.x, shell: bash},
-#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.x, shell: 'alpine.sh {0}'},
-#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.x, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.x, shell: bash},
+          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.x, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.x, shell: 'alpine.sh {0}'},
           {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 20.x, shell: bash},
-#          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.x, shell: bash},
-#          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.x, shell: 'alpine.sh {0}'},
-#          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.x, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.x, shell: bash},
+          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.x, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.x, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
     if: needs.check.outputs.package_exists == 'no'
@@ -94,8 +94,12 @@ jobs:
           echo "version=$(python3 -V | awk '{split($2,a,"."); print "{\"major\":"a[1]",\"minor\":"a[2]",\"patch\":"a[3]"}"}')" >> $GITHUB_OUTPUT
 
       - name: fix python3.12 missing distutils
+        env:
+          MAJOR: ${{ fromJSON(steps.python.outputs.version).major }}
+          MINOR: ${{ fromJSON(steps.python.outputs.version).minor }}
+          PATCH: ${{ fromJSON(steps.python.outputs.version).patch }}
         run: python3 -m pip install packaging setuptools
-        if: ${{ fromJSON(steps.python.outputs.version).major >= 3 && fromJSON(steps.python.outputs.version).minor >= 12 }}
+        if: ${{ fromJSON(env.MAJOR) >= 3 && fromJSON(env.MINOR) >= 12 }}
 
       - name: Install Node dependencies
         run: npm install --ignore-scripts
