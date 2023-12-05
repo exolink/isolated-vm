@@ -26,10 +26,11 @@ jobs:
       - name: Check package
         id: package_exists
         run: |
+          echo "exists=no" >> $GITHUB_OUTPUT
 #          if [ $(npm view ${{ steps.get_name.outputs.name }}@${{ steps.get_version.outputs.version }} version 2> /dev/null) ]; then
 #            echo "exists=yes" >> $GITHUB_OUTPUT
 #          else
-            echo "exists=no" >> $GITHUB_OUTPUT
+#            echo "exists=no" >> $GITHUB_OUTPUT
 #          fi
 
       - name: Log outputs
