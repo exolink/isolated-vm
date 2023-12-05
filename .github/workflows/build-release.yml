@@ -43,13 +43,13 @@ jobs:
     strategy:
       matrix:
         build: [
-#          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 18.x, shell: bash},
-#          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.x, shell: bash},
-#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.x, shell: 'alpine.sh {0}'},
-#          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.x, shell: 'alpine.sh {0}'},
-#          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 20.x, shell: bash},
-#          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.x, shell: bash},
-#          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.x, shell: 'alpine.sh {0}'},
+          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 18.x, shell: bash},
+          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 18.x, shell: bash},
+          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: aarch64, node: 18.x, shell: 'alpine.sh {0}'},
+          {runner: ubuntu-latest, os: alpine, branch: v3.18, arch: x86_64,  node: 18.x, shell: 'alpine.sh {0}'},
+          {runner: macos-latest,  os: darwin, branch: '',    arch: x64,     node: 20.x, shell: bash},
+          {runner: ubuntu-latest, os: linux,  branch: '',    arch: x64,     node: 20.x, shell: bash},
+          {runner: ubuntu-latest, os: alpine, branch: edge,  arch: aarch64, node: 20.x, shell: 'alpine.sh {0}'},
           {runner: ubuntu-latest, os: alpine, branch: edge,  arch: x86_64,  node: 20.x, shell: 'alpine.sh {0}'},
         ]
     runs-on: ${{ matrix.build.runner }}
@@ -121,4 +121,4 @@ jobs:
         with:
           access: public
           token: ${{ secrets.NPM_TOKEN }}
-          dry-run: true
+          dry-run: false
