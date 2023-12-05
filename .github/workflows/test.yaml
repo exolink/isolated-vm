@@ -10,17 +10,21 @@ jobs:
       - name: get python version
         id: python
         run: |
-          echo "version=$(python3 -V | awk '{split($2,a,"."); print "{\"major\":"a[1]",\"minor\":"a[2]",\"patch\":"a[3]"}"}')" >> $GITHUB_OUTPUT
+          echo "major=$(python3 -V | awk '{split($2,a,"."); print a[1]}')" >> $GITHUB_OUTPUT
+          echo "minor=$(python3 -V | awk '{split($2,a,"."); print a[2]}')" >> $GITHUB_OUTPUT
+          echo "patch=$(python3 -V | awk '{split($2,a,"."); print a[3]}')" >> $GITHUB_OUTPUT
 
       - name: debug python version
         run: |
-          echo "${{ steps.python.outputs.version }}"
+          echo "${{ steps.python.outputs.major }}"
+          echo "${{ steps.python.outputs.minor }}"
+          echo "${{ steps.python.outputs.patch }}"
 
       - name: fix python3.12 missing distutils
         env:
-          MAJOR: ${{ fromJSON(steps.python.outputs.version).major }}
-          MINOR: ${{ fromJSON(steps.python.outputs.version).minor }}
-          PATCH: ${{ fromJSON(steps.python.outputs.version).patch }}
+          MAJOR: ${{ steps.python.outputs.major }}
+          MINOR: ${{ steps.python.outputs.minor }}
+          PATCH: ${{ steps.python.outputs.patch }}
         run: python3 -m pip install packaging setuptools
         if: ${{ fromJSON(env.MAJOR) >= 3 && fromJSON(env.MINOR) >= 12 }}
 
