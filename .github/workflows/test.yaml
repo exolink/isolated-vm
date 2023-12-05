@@ -22,5 +22,5 @@ jobs:
           MINOR: ${{ fromJSON(steps.python.outputs.version).minor }}
           PATCH: ${{ fromJSON(steps.python.outputs.version).patch }}
         run: python3 -m pip install packaging setuptools
-        if: ${{ fromJSON($MAJOR) >= 3 && fromJSON($MINOR) >= 12 }}
+        if: ${{ fromJSON(env.MAJOR) >= 3 && fromJSON(env.MINOR) >= 12 }}
 
