@@ -12,6 +12,10 @@ jobs:
         run: |
           echo "version=$(python3 -V | awk '{split($2,a,"."); print "{\"major\":"a[1]",\"minor\":"a[2]",\"patch\":"a[3]"}"}')" >> $GITHUB_OUTPUT
 
+      - name: debug python version
+        run: |
+          echo "${{ steps.python.outputs.version }}"
+
       - name: fix python3.12 missing distutils
         env:
           MAJOR: ${{ fromJSON(steps.python.outputs.version).major }}
