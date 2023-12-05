@@ -91,13 +91,15 @@ jobs:
       - name: get python version
         id: python
         run: |
-          echo "version=$(python3 -V | awk '{split($2,a,"."); print "{\"major\":"a[1]",\"minor\":"a[2]",\"patch\":"a[3]"}"}')" >> $GITHUB_OUTPUT
+          echo "major=$(python3 -V | awk '{split($2,a,"."); print a[1]}')" >> $GITHUB_OUTPUT
+          echo "minor=$(python3 -V | awk '{split($2,a,"."); print a[2]}')" >> $GITHUB_OUTPUT
+          echo "patch=$(python3 -V | awk '{split($2,a,"."); print a[3]}')" >> $GITHUB_OUTPUT
 
       - name: fix python3.12 missing distutils
         env:
-          PY_MAJOR: ${{ fromJSON(steps.python.outputs.version).major }}
-          PY_MINOR: ${{ fromJSON(steps.python.outputs.version).minor }}
-          PY_PATCH: ${{ fromJSON(steps.python.outputs.version).patch }}
+          PY_MAJOR: ${{ steps.python.outputs.major }}
+          PY_MINOR: ${{ steps.python.outputs.minor }}
+          PY_PATCH: ${{ steps.python.outputs.patch }}
         run: python3 -m pip install packaging setuptools
         if: ${{ fromJSON(env.PY_MAJOR) >= 3 && fromJSON(env.PY_MINOR) >= 12 }}
 
