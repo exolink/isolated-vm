@@ -11,7 +11,7 @@
     "install": "node-gyp-build",
     "lint": "find src -name '*.cc' | xargs -n1 clang-tidy",
     "test": "node test.js || nodejs test.js",
-    "prebuild": "prebuildify -t 18.14.1 --strip --tag-armv --tag-libc"
+    "prebuild": "prebuildify --strip --tag-armv --tag-libc"
   },
   "dependencies": {
     "node-gyp-build": "^4.6.0"
