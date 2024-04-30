@@ -79,6 +79,7 @@ jobs:
             make
             build-base
             python3
+            py3-pip
             nodejs
             npm
         if: matrix.build.os == 'alpine'
