@@ -102,7 +102,7 @@ jobs:
           PY_MAJOR: ${{ steps.python.outputs.major }}
           PY_MINOR: ${{ steps.python.outputs.minor }}
           PY_PATCH: ${{ steps.python.outputs.patch }}
-        run: python3 -m pip install packaging setuptools
+        run: python3 -m pip install packaging setuptools --break-system-packages
         if: ${{ fromJSON(env.PY_MAJOR) >= 3 && fromJSON(env.PY_MINOR) >= 12 }}
 
       - name: Install Node dependencies
